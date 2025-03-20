@@ -14,48 +14,6 @@
 #include <boost/algorithm/string/split.hpp>
 
 
-//Mining algorithm
-
-const arith_uint256 maxUint = UintToArith256(
-        uint256S("ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"));
-
-static void MineGenesis(CBlockHeader &genesisBlock, const uint256 &powLimit, bool noProduction) {
-    if (noProduction) genesisBlock.nTime = std::time(0);
-    genesisBlock.nNonce = 0;
-
-    printf("NOTE: Genesis nTime = %u \n", genesisBlock.nTime);
-    printf("WARN: Genesis nNonce (BLANK!) = %u \n", genesisBlock.nNonce);
-
-    arith_uint256 besthash;
-    memset(&besthash, 0xFF, 32);
-    arith_uint256 hashTarget = UintToArith256(powLimit);
-    printf("Target: %s\n", hashTarget.GetHex().c_str());
-    arith_uint256 newhash = UintToArith256(genesisBlock.GetHash());
-    while (newhash > hashTarget) {
-        genesisBlock.nNonce++;
-        if (genesisBlock.nNonce == 0) {
-            printf("NONCE WRAPPED, incrementing time\n");
-            ++genesisBlock.nTime;
-        }
-        // If nothing found after trying for a while, print status
-        if ((genesisBlock.nNonce & 0xffff) == 0)
-            printf("nonce %08X: hash = %s \r",
-                   genesisBlock.nNonce, newhash.ToString().c_str(),
-                   hashTarget.ToString().c_str());
-
-        if (newhash < besthash) {
-            besthash = newhash;
-            printf("New best: %s\n", newhash.GetHex().c_str());
-        }
-        newhash = UintToArith256(genesisBlock.GetHash());
-    }
-    printf("\nGenesis nTime = %u \n", genesisBlock.nTime);
-    printf("Genesis nNonce = %u \n", genesisBlock.nNonce);
-    printf("Genesis nBits: %08x\n", genesisBlock.nBits);
-    printf("Genesis Hash = %s\n", newhash.ToString().c_str());
-    printf("Genesis Hash Merkle Root = %s\n", genesisBlock.hashMerkleRoot.ToString().c_str());
-    printf("Genesis Hash Merkle Root = %s\n", genesisBlock.hashMerkleRoot.ToString().c_str());
-}
 static CBlock CreateGenesisBlock(const char* pszTimestamp, const CScript& genesisOutputScript, uint32_t nTime, uint32_t nNonce, uint32_t nBits, int32_t nVersion, const CAmount& genesisReward)
 {
     CMutableTransaction txNew;
@@ -140,13 +98,13 @@ pchMessageStart[3] = 0xc3;  // C modificata
         nPruneAfterHeight = 100000;
         m_assumed_blockchain_size = 40;
         m_assumed_chain_state_size = 2;
-
         genesis = CreateGenesisBlock(1710710401, 2218800825, 0x1f3fffff, 1, 50 * COIN);
 // MineGenesis(genesis, consensus.powLimit, true);
 
         consensus.hashGenesisBlock = genesis.GetHash();
         assert(consensus.hashGenesisBlock == uint256S("0x00000000f8c0b4460041bbc54b470b000d07cf1563edbe84598ade3a2bfef412"));
         assert(genesis.hashMerkleRoot == uint256S("0x10385b293c52a8ae1d8ccba37a826ca0df7150e29eeb7d7e089402f6d30b6439"));
+>>>>>>> 379890672d521a2ac0122515da783e5c45ba0394
 
 
         // Note that of those which support the service bits prefix, most only support a subset of
@@ -244,10 +202,17 @@ pchMessageStart[3] = 0xc3;  // C modificata
         m_assumed_blockchain_size = 4;
         m_assumed_chain_state_size = 1;
 
+<<<<<<< HEAD
+        genesis = CreateGenesisBlock(1710710401, 1319, 0x1f3fffff, 1, 50 * COIN);
+        consensus.hashGenesisBlock = genesis.GetHash();
+        assert(consensus.hashGenesisBlock == uint256S("0x41ae2991ee0dfb00febc5cdc2bb5031e9fa4ca3bd2a84111676c7fb5a7d445c6"));
+        assert(genesis.hashMerkleRoot == uint256S("0x63f6d77b79b077f0b4309cf92144cc599a927e43f0889cddeaec044d608a6d79"));
+=======
         genesis = CreateGenesisBlock(1742234454, 1074415, 0x1e0ffff0, 1, 50 * COIN);
         consensus.hashGenesisBlock = genesis.GetHash();
         assert(consensus.hashGenesisBlock == uint256S("0x00000c99612f953c47a578abe225c228351f111638945235e252e78f7fab1a56"));
         assert(genesis.hashMerkleRoot == uint256S("0x97ddfbbae6be97fd6cdf3e7ca13232a3afff2353e29badfab7f73011edd4ced9"));
+>>>>>>> 379890672d521a2ac0122515da783e5c45ba0394
 
         vFixedSeeds.clear();
         vSeeds.clear();
@@ -281,7 +246,11 @@ base58Prefixes[EXT_SECRET_KEY] = {0x04, 0x88, 0xB0, 0xE4};           // Modifica
 
         chainTxData = ChainTxData{
             // Data from rpc: getchaintxstats 17280 fdb81fc2edae4e315716890bd343d814184ea50331cd47166e19120a5163a678
+<<<<<<< HEAD
+            /* nTime    */ 1710710401,
+=======
             /* nTime    */ 1742234454,
+>>>>>>> 379890672d521a2ac0122515da783e5c45ba0394
             /* nTxCount */ 0,
             /* dTxRate  */ 0.0,
         };
@@ -341,10 +310,17 @@ pchMessageStart[3] = 0xc3;  // C modificata
 
         UpdateActivationParametersFromArgs(args);
 
+<<<<<<< HEAD
+         genesis = CreateGenesisBlock(1710710401, 1319, 0x1f3fffff, 1, 50 * COIN);
+        consensus.hashGenesisBlock = genesis.GetHash();
+        assert(consensus.hashGenesisBlock == uint256S("0x41ae2991ee0dfb00febc5cdc2bb5031e9fa4ca3bd2a84111676c7fb5a7d445c6"));
+        assert(genesis.hashMerkleRoot == uint256S("0x63f6d77b79b077f0b4309cf92144cc599a927e43f0889cddeaec044d608a6d79"));
+=======
          genesis = CreateGenesisBlock(1742234454, 1074415, 0x1e0ffff0, 1, 50 * COIN);
         consensus.hashGenesisBlock = genesis.GetHash();
         assert(consensus.hashGenesisBlock == uint256S("0x00000c99612f953c47a578abe225c228351f111638945235e252e78f7fab1a56"));
         assert(genesis.hashMerkleRoot == uint256S("0x97ddfbbae6be97fd6cdf3e7ca13232a3afff2353e29badfab7f73011edd4ced9"));
+>>>>>>> 379890672d521a2ac0122515da783e5c45ba0394
 
         vFixedSeeds.clear(); //!< Regtest mode doesn't have any fixed seeds.
         vSeeds.clear();      //!< Regtest mode doesn't have any DNS seeds.
@@ -362,7 +338,7 @@ pchMessageStart[3] = 0xc3;  // C modificata
         };
 
         chainTxData = ChainTxData{
-            0,
+            1710710401,
             0,
             0
         };
